@@ -92,13 +92,17 @@ app.put('/todos/:id', async (req,res)=>
       const updatedtodo =  await Todomodel.findByIdAndUpdate(
         id,
         {title,description}
+        ,{new:true}
+
+
       )
 
       if(!updatedtodo)
       {
-        
+
         return res.status(404).json({message:'todo not found'});
       }
+        res.json(updatedtodo);
     }
     catch(err)
     {
@@ -109,6 +113,26 @@ app.put('/todos/:id', async (req,res)=>
 
 
 });
+
+
+//
+//delete a todo item
+
+app.delete('/todos/:id', async (req,res)=>
+{
+    try{
+        const id = req.params.id;
+        const deletedtodo = await Todomodel.findByIdAndDelete(id);
+        res.status(204).end();
+    }
+    catch(err)
+    {
+        console.log('error deleting todo', err);
+        res.status(500).json({message:err.message});
+    }
+
+}
+);
 
 
 
